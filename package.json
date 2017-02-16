@@ -1,0 +1,37 @@
+{
+  "name": "timelines",
+  "description": "A timezone app with timelines",
+  "private": true,
+  "author": "Isham Faizal (https://adimaja.com/)",
+  "version": "0.0.1",
+  "repository": "https://github.com/ishamf/timelines",
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "moment": "^2.17.1",
+    "react": "^15.4",
+    "react-dom": "^15.4",
+    "react-redux": "^4.3.0",
+    "redux": "^3.2.1",
+    "redux-actions": "^1.2.1",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "babel-brunch": "~6.0.0",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-react": "^6.22",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "hmr-brunch": "^0.1",
+    "standard": "^8.6.0",
+    "uglify-js-brunch": "^2"
+  }
+}
