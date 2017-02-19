@@ -22,7 +22,7 @@ export default connect((state) => ({
 // Utility functions
 function getOptimalDateFormat (unit) {
   switch (unit) {
-    case 'second': return 'mm:ss'
+    case 'second': return 'hh:mm:ss A'
     case 'minute': return 'hh:mm A'
     case 'hour': return 'ddd hh:mm A'
     case 'day': return 'MMM Do hh:mm A'
