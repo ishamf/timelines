@@ -81,7 +81,6 @@ class App extends React.Component {
         onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}
         onWheel={wheel}
       >
-
         <Select
           name='timezone'
           value={modelTimelines.map(({timezone}) => ({value: timezone, label: timezone}))}
