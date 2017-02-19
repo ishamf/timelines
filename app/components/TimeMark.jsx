@@ -1,15 +1,20 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import moment from 'moment-timezone'
+import classNames from 'classnames'
 
 import {getCenterTime, getScreenRange} from '../state'
 
-const TimeMark = ({centerTime, screenRange, time, timezone, unit}) => {
+const TimeMark = ({centerTime, screenRange, time, timezone, unit, marker}) => {
   return (
-    <div className='timeline-time-mark mod-time' style={{
+    <div className={classNames({
+      'timeline-time-mark': true,
+      'mod-time': !marker,
+      'mod-marker': marker
+    })} style={{
       left: `${100 * (time - centerTime + screenRange / 2) / screenRange}%`
     }}>
-      {moment.tz(time, 'UTC').tz(timezone).format(getOptimalDateFormat(unit))}
+      {moment.tz(time, 'UTC').tz(timezone).format(marker ? 'YYYY MMM Do hh:mm:ss A' : getOptimalDateFormat(unit))}
     </div>
   )
 }

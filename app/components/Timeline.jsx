@@ -2,12 +2,14 @@ import React from 'react'
 import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 
-import {getCenterTime, getScreenRange} from '../state'
+import {getCenterTime, getScreenRange, getMarkers} from '../state'
 
 import TimeMark from './TimeMark'
 
-const Timeline = ({centerTime, screenRange, timeline: {timezone}}) => {
+const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
   const timeMarks = []
+
+  const markerTimes = markers.filter(({controlled}) => !controlled).map(({time}) => time)
 
   const {unit: [count, unit], resolution} = getTimeMarkResolution(screenRange)
 
@@ -20,20 +22,31 @@ const Timeline = ({centerTime, screenRange, timeline: {timezone}}) => {
     tm.add(count, unit).startOf(unit)
   }
 
+  markerTimes.forEach(mt => {
+    if (timeMarks.length > 0) {
+      const c = getClosest(timeMarks, mt)
+      timeMarks.splice(timeMarks.indexOf(c), 1)
+    }
+  })
+
   return (
     <div className='timeline'>
       <div className='timeline-timezone-label'>
         {timezone}
       </div>
 
+      {markers.map(({time}) => (<TimeMark time={time} timezone={timezone} unit={unit} marker />))}
+
       {timeMarks.map(timeMarkTime => (
         <TimeMark time={timeMarkTime} timezone={timezone} unit={unit} />
       ))}
+
     </div>
   )
 }
 
 export default connect((state) => ({
+  markers: getMarkers(state),
   screenRange: getScreenRange(state),
   centerTime: getCenterTime(state)
 }))(Timeline)

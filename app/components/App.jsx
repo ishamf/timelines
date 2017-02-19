@@ -1,10 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as Actions from '../actions'
-import {getTimelines, getScreenRange, getCenterTime} from '../state'
+import {getTimelines, getScreenRange, getCenterTime, getMarkers} from '../state'
 import moment from 'moment-timezone'
 
 import Timeline from './Timeline'
+import Marker from './Marker'
 
 const scrollZoomSpeed = 0.001
 
@@ -20,8 +21,8 @@ class App extends React.Component {
 
   render () {
     const {
-      timelines, centerTime, screenRange,
-      replaceCenterTime, replaceScreenRange
+      timelines, centerTime, screenRange, markers,
+      replaceCenterTime, replaceScreenRange, replaceMouseTime
     } = this.props
 
     const mouseDown = (e) => {
@@ -37,6 +38,11 @@ class App extends React.Component {
     }
 
     const mouseMove = (e) => {
+      const mouseLocationRatio = (e.clientX / window.innerWidth)
+      const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
+
+      replaceMouseTime(mouseLocationTime)
+
       if (this.state.dragging) {
         const millisecondsMoved = 1.0 * screenRange * (e.clientX - this.state.lastX) / window.innerWidth
 
@@ -65,12 +71,15 @@ class App extends React.Component {
         screenRange: {screenRange}
 
         {timelines.map(timeline => (<Timeline timeline={timeline} />))}
+
+        {markers.map(({time, label}) => <Marker time={time} label={label} topPos='50%' />)}
       </div>
     )
   }
 }
 
 export default connect((state) => ({
+  markers: getMarkers(state),
   timelines: getTimelines(state),
   centerTime: getCenterTime(state),
   screenRange: getScreenRange(state)

@@ -23,6 +23,7 @@ body {
   width: 100%;
   position: relative;
   margin-top: 5rem;
+  user-select: none;
 }
 
 .timeline-timezone-label {
@@ -40,6 +41,7 @@ body {
   color: @timeline-time-mark-color;
   transform: translate(-1.5px, 0);
   z-index: -1;
+  user-select: none;
 }
 
 .timeline-time-mark.mod-marker {
@@ -61,7 +63,8 @@ body {
   top: 0;
   height: 100vh;
   border-left: 2px solid @marker-line-color;
-  transform: translate(-1px, 0)
+  transform: translate(-1px, 0);
+  user-select: none;
 }
 
 .marker-label {
