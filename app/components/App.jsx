@@ -48,7 +48,7 @@ class App extends React.Component {
       const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
 
       replaceMouseTime(mouseLocationTime)
-      this.setState({topPos: `${100 * e.clientY / window.innerHeight}%`})
+      this.setState({topPos: `${100 * (e.clientY - 20) / window.innerHeight}%`})
 
       if (this.state.dragging) {
         const millisecondsMoved = 1.0 * screenRange * (e.clientX - this.state.lastX) / window.innerWidth
@@ -81,6 +81,11 @@ class App extends React.Component {
         onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}
         onWheel={wheel}
       >
+        <div className='timelines-info'>
+          Drag to move. <br />
+          Scroll to zoom.
+        </div>
+
         <Select
           name='timezone'
           value={modelTimelines.map(({timezone}) => ({value: timezone, label: timezone}))}
