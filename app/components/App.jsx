@@ -6,6 +6,8 @@ import moment from 'moment-timezone'
 
 import Timeline from './Timeline'
 
+const scrollZoomSpeed = 0.001
+
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -19,7 +21,7 @@ class App extends React.Component {
   render () {
     const {
       timelines, centerTime, screenRange,
-      replaceCenterTime
+      replaceCenterTime, replaceScreenRange
     } = this.props
 
     const mouseDown = (e) => {
@@ -44,8 +46,22 @@ class App extends React.Component {
       }
     }
 
+    const wheel = (e) => {
+      const linearDifference = e.deltaY * scrollZoomSpeed
+      const mouseLocationRatio = (e.clientX / window.innerWidth)
+      const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
+      const newScreenRange = Math.exp(Math.log(screenRange) + linearDifference)
+      const newCenterTime = mouseLocationTime - mouseLocationRatio * newScreenRange + newScreenRange / 2
+
+      replaceScreenRange(newScreenRange)
+      replaceCenterTime(newCenterTime)
+    }
+
     return (
-      <div id='content' className='timelines-app' onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
+      <div id='content' className='timelines-app'
+        onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}
+        onWheel={wheel}
+      >
         centerTime: {moment(centerTime).tz('UTC').toISOString()} ({centerTime})
         <br />
         screenRange: {screenRange}

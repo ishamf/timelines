@@ -39,6 +39,8 @@ export function reducer (state = initialState, {type, payload}) {
   switch (type) {
     case 'REPLACE_CENTER_TIME':
       return state.setIn(['view', 'centerTime'], payload)
+    case 'REPLACE_SCREEN_RANGE':
+      return state.setIn(['view', 'screenRange'], payload)
     default:
       return state
   }
