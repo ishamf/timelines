@@ -5,12 +5,7 @@ import moment from 'moment-timezone'
 export const initialState = fromJS({
   model: {
     timelines: [
-      {
-        timezone: 'UTC'
-      },
-      {
-        timezone: moment.tz.guess()
-      }
+
     ],
     markers: [
 
@@ -34,7 +29,16 @@ export function getCenterTime (state) {
 }
 
 export function getTimelines (state) {
-  return state.getIn(['model', 'timelines']).toJS()
+  return [
+    {
+      timezone: 'UTC'
+    },
+    {
+      timezone: moment.tz.guess()
+    }
+  ].concat(
+    state.getIn(['model', 'timelines']).toJS()
+  )
 }
 
 export function getMouseTime (state) {
@@ -61,6 +65,8 @@ export function getMarkers (state) {
 
 export function reducer (state = initialState, {type, payload}) {
   switch (type) {
+    case 'REPLACE_TIMELINES':
+      return state.setIn(['model', 'timelines'], fromJS(payload))
     case 'REPLACE_CENTER_TIME':
       return state.setIn(['view', 'centerTime'], payload)
     case 'REPLACE_MOUSE_TIME':

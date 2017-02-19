@@ -9,10 +9,14 @@ import Marker from './Marker'
 
 const scrollZoomSpeed = 0.001
 
+import Select from 'react-select'
+
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      timezones: [],
+      selecting: false,
       dragging: false,
       lastCenterTime: undefined,
       lastX: undefined
@@ -22,7 +26,7 @@ class App extends React.Component {
   render () {
     const {
       timelines, centerTime, screenRange, markers,
-      replaceCenterTime, replaceScreenRange, replaceMouseTime
+      replaceCenterTime, replaceScreenRange, replaceMouseTime, replaceTimelines
     } = this.props
 
     const mouseDown = (e) => {
@@ -38,6 +42,8 @@ class App extends React.Component {
     }
 
     const mouseMove = (e) => {
+      if (this.state.selecting) return true
+
       const mouseLocationRatio = (e.clientX / window.innerWidth)
       const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
 
@@ -51,6 +57,8 @@ class App extends React.Component {
     }
 
     const wheel = (e) => {
+      if (this.state.selecting) return
+
       const linearDifference = e.deltaY * scrollZoomSpeed
       const mouseLocationRatio = (e.clientX / window.innerWidth)
       const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
@@ -61,18 +69,38 @@ class App extends React.Component {
       replaceCenterTime(newCenterTime)
     }
 
+    const selectChange = (values) => {
+      this.setState({timezones: values})
+      console.log(values)
+      replaceTimelines(values.map(v => ({
+        timezone: v.value
+      })))
+    }
+
     return (
       <div id='content' className='timelines-app'
         onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}
         onWheel={wheel}
       >
-        centerTime: {moment(centerTime).tz('UTC').toISOString()} ({centerTime})
-        <br />
-        screenRange: {screenRange}
+
+        <Select
+          name='timezone'
+          value={this.state.timezones}
+          onChange={selectChange}
+          options={moment.tz.names().map(tz => ({
+            label: tz,
+            value: tz
+          }))}
+          multi
+          onFocus={() => { this.state.selecting = true }}
+          onBlur={() => { this.state.selecting = false }}
+          className='timezone-selector'
+        />
 
         {timelines.map(timeline => (<Timeline timeline={timeline} />))}
 
         {markers.map(({time, label}) => <Marker time={time} label={label} topPos='50%' />)}
+
       </div>
     )
   }
