@@ -3,18 +3,17 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import counterApp from './reducers'
 import App from 'components/App'
 
-import {initialState} from './state'
+import {reducer, initialState} from './state'
 
 const storeInitialData = module.hot && module.hot.data && module.hot.data.counter || initialState
 
-const store = createStore(counterApp, storeInitialData, applyMiddleware(thunk))
+const store = createStore(reducer, storeInitialData, applyMiddleware(thunk))
 
 if (module.hot) {
-  module.hot.accept('./reducers', () => {
-    store.replaceReducer(require('./reducers').default)
+  module.hot.accept('./state', () => {
+    store.replaceReducer(require('./state').reducer)
   })
   module.hot.accept()
 
