@@ -65,8 +65,16 @@ function getTimeMarkResolution (screenRange) {
 const timeUnitNames = {
   // eslint-disable-next-line no-useless-computed-key
   [1000]: 'second',
+  [1000 * 15]: 'second',
+  [1000 * 30]: 'second',
   [1000 * 60]: 'minute',
+  [1000 * 60 * 5]: 'minute',
+  [1000 * 60 * 10]: 'minute',
+  [1000 * 60 * 20]: 'minute',
   [1000 * 60 * 60]: 'hour',
+  [1000 * 60 * 60 * 3]: 'hour',
+  [1000 * 60 * 60 * 6]: 'hour',
+  [1000 * 60 * 60 * 12]: 'hour',
   [1000 * 60 * 60 * 24]: 'day',
   [1000 * 60 * 60 * 24 * 7]: 'week',
   [1000 * 60 * 60 * 24 * 30]: 'month',
