@@ -3,15 +3,16 @@ import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 import classNames from 'classnames'
 
-import {getCenterTime, getScreenRange} from '../state'
+import {getCenterTime, getScreenRange, getHue} from '../state'
 
-const TimeMark = ({centerTime, screenRange, time, timezone, unit, marker}) => {
+const TimeMark = ({centerTime, screenRange, time, timezone, unit, marker, hue}) => {
   return (
     <div className={classNames({
       'timeline-time-mark': true,
       'mod-time': !marker,
       'mod-marker': marker
     })} style={{
+      color: `hsl(${hue}, 30%, 65%)`,
       left: `${100 * (time - centerTime + screenRange / 2) / screenRange}%`
     }}>
       {moment.tz(time, 'UTC').tz(timezone).format(marker ? 'YYYY MMM Do hh:mm:ss A' : getOptimalDateFormat(unit))}
@@ -19,7 +20,8 @@ const TimeMark = ({centerTime, screenRange, time, timezone, unit, marker}) => {
   )
 }
 
-export default connect((state) => ({
+export default connect((state, props) => ({
+  hue: getHue(state, props.marker || props.timezone),
   screenRange: getScreenRange(state),
   centerTime: getCenterTime(state)
 }))(TimeMark)

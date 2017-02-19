@@ -2,11 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 
-import {getCenterTime, getScreenRange, getMarkers} from '../state'
+import {getCenterTime, getScreenRange, getMarkers, getHue} from '../state'
 
 import TimeMark from './TimeMark'
 
-const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
+const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers, hue}) => {
   const timeMarks = []
 
   const markerTimes = markers
@@ -32,7 +32,7 @@ const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
   })
 
   return (
-    <div className='timeline'>
+    <div className='timeline' style={{color: `hsl(${hue}, 100%, 25%)`}}>
       <div className='timeline-timezone-label'>
         {timezone}
       </div>
@@ -41,13 +41,14 @@ const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
         <TimeMark time={timeMarkTime} timezone={timezone} unit={unit} />
       ))}
 
-      {markers.map(({time}) => (<TimeMark time={time} timezone={timezone} unit={unit} marker />))}
+      {markers.map(({time, label}) => (<TimeMark time={time} timezone={timezone} unit={unit} marker={label} />))}
 
     </div>
   )
 }
 
-export default connect((state) => ({
+export default connect((state, props) => ({
+  hue: getHue(state, props.timeline.timezone),
   markers: getMarkers(state),
   screenRange: getScreenRange(state),
   centerTime: getCenterTime(state)

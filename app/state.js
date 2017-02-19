@@ -67,6 +67,15 @@ export function getMarkers (state) {
   ]
 }
 
+export function getHue (state, label) {
+  const names = [].concat(
+    getMarkers(state).map(x => x.label),
+    getTimelines(state).map(x => x.timezone)
+  )
+
+  return 360.0 * names.indexOf(label) / names.length
+}
+
 export function reducer (state = initialState, {type, payload}) {
   switch (type) {
     case 'REPLACE_TIMELINES':
