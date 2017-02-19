@@ -49,7 +49,7 @@ export function getMarkers (state) {
   return [
     {
       controlled: true,
-      label: '',
+      label: moment.tz(getMouseTime(state), 'UTC').fromNow(),
       time: getMouseTime(state)
     },
     {
