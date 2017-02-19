@@ -9,7 +9,9 @@ import TimeMark from './TimeMark'
 const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
   const timeMarks = []
 
-  const markerTimes = markers.filter(({controlled}) => !controlled).map(({time}) => time)
+  const markerTimes = markers
+    .filter(({time, controlled}) => !controlled && Math.abs(time - centerTime) < screenRange / 2)
+    .map(({time}) => time)
 
   const {unit: [count, unit], resolution} = getTimeMarkResolution(screenRange)
 
@@ -35,11 +37,11 @@ const Timeline = ({centerTime, screenRange, timeline: {timezone}, markers}) => {
         {timezone}
       </div>
 
-      {markers.map(({time}) => (<TimeMark time={time} timezone={timezone} unit={unit} marker />))}
-
       {timeMarks.map(timeMarkTime => (
         <TimeMark time={timeMarkTime} timezone={timezone} unit={unit} />
       ))}
+
+      {markers.map(({time}) => (<TimeMark time={time} timezone={timezone} unit={unit} marker />))}
 
     </div>
   )

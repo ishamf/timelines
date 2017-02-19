@@ -48,13 +48,13 @@ export function getCurrentTime (state) {
 export function getMarkers (state) {
   return [
     {
+      label: 'Now',
+      time: getCurrentTime(state)
+    },
+    {
       controlled: true,
       label: moment.tz(getMouseTime(state), 'UTC').fromNow(),
       time: getMouseTime(state)
-    },
-    {
-      label: 'Now',
-      time: getCurrentTime(state)
     }
   ]
 }
