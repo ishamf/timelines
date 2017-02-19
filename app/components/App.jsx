@@ -40,8 +40,6 @@ class App extends React.Component {
       if (this.state.dragging) {
         const millisecondsMoved = 1.0 * screenRange * (e.clientX - this.state.lastX) / window.innerWidth
 
-        console.log(millisecondsMoved)
-
         replaceCenterTime(this.state.lastCenterTime - millisecondsMoved)
       }
     }

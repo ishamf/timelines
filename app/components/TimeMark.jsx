@@ -24,8 +24,12 @@ function getOptimalDateFormat (unit) {
   switch (unit) {
     case 'second': return 'hh:mm:ss A'
     case 'minute': return 'hh:mm A'
-    case 'hour': return 'ddd hh:mm A'
-    case 'day': return 'MMM Do hh:mm A'
-    default: return 'YYYY MMM Do hh:mm A'
+    case 'hour': return 'MMM Do hh:mm A'
+    case 'day': return 'MMM Do'
+    case 'week': return 'MMM Do'
+    case 'month': return 'YYYY MMM'
+    case 'quarter': return 'YYYY MMM'
+    case 'year': return 'YYYY'
+    default: return 'YYYY MMM Do'
   }
 }
