@@ -28,6 +28,10 @@ export function getCenterTime (state) {
   return state.getIn(['view', 'centerTime'])
 }
 
+export function getModelTimelines (state) {
+  return state.getIn(['model', 'timelines']).toJS()
+}
+
 export function getTimelines (state) {
   return [
     {
@@ -37,7 +41,7 @@ export function getTimelines (state) {
       timezone: moment.tz.guess()
     }
   ].concat(
-    state.getIn(['model', 'timelines']).toJS()
+    getModelTimelines(state)
   )
 }
 

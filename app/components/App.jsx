@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as Actions from '../actions'
-import {getTimelines, getScreenRange, getCenterTime, getMarkers} from '../state'
+import {getTimelines, getScreenRange, getCenterTime, getMarkers, getModelTimelines} from '../state'
 import moment from 'moment-timezone'
 
 import Timeline from './Timeline'
@@ -15,7 +15,7 @@ class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      timezones: [],
+      topPos: '50%',
       selecting: false,
       dragging: false,
       lastCenterTime: undefined,
@@ -25,7 +25,7 @@ class App extends React.Component {
 
   render () {
     const {
-      timelines, centerTime, screenRange, markers,
+      timelines, centerTime, screenRange, markers, modelTimelines,
       replaceCenterTime, replaceScreenRange, replaceMouseTime, replaceTimelines
     } = this.props
 
@@ -48,6 +48,7 @@ class App extends React.Component {
       const mouseLocationTime = mouseLocationRatio * screenRange + centerTime - screenRange / 2
 
       replaceMouseTime(mouseLocationTime)
+      this.setState({topPos: `${100 * e.clientY / window.innerHeight}%`})
 
       if (this.state.dragging) {
         const millisecondsMoved = 1.0 * screenRange * (e.clientX - this.state.lastX) / window.innerWidth
@@ -70,8 +71,6 @@ class App extends React.Component {
     }
 
     const selectChange = (values) => {
-      this.setState({timezones: values})
-      console.log(values)
       replaceTimelines(values.map(v => ({
         timezone: v.value
       })))
@@ -85,7 +84,7 @@ class App extends React.Component {
 
         <Select
           name='timezone'
-          value={this.state.timezones}
+          value={modelTimelines.map(({timezone}) => ({value: timezone, label: timezone}))}
           onChange={selectChange}
           options={moment.tz.names().map(tz => ({
             label: tz,
@@ -95,11 +94,12 @@ class App extends React.Component {
           onFocus={() => { this.state.selecting = true }}
           onBlur={() => { this.state.selecting = false }}
           className='timezone-selector'
+          placeholder='Add more timezones...'
         />
 
         {timelines.map(timeline => (<Timeline timeline={timeline} />))}
 
-        {markers.map(({time, label}) => <Marker time={time} label={label} topPos='50%' />)}
+        {markers.map(({time, label}) => <Marker time={time} label={label} topPos={this.state.topPos} />)}
 
       </div>
     )
@@ -109,6 +109,7 @@ class App extends React.Component {
 export default connect((state) => ({
   markers: getMarkers(state),
   timelines: getTimelines(state),
+  modelTimelines: getModelTimelines(state),
   centerTime: getCenterTime(state),
   screenRange: getScreenRange(state)
 }), Actions)(App)
