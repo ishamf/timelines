@@ -1,8 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as Actions from '../actions'
-import {getScreenRange, getCenterTime} from '../state'
+import {getTimelines, getScreenRange, getCenterTime} from '../state'
 import moment from 'moment-timezone'
+
+import Timeline from './Timeline'
 
 class App extends React.Component {
   constructor (props) {
@@ -15,7 +17,10 @@ class App extends React.Component {
   }
 
   render () {
-    const {centerTime, screenRange, replaceCenterTime} = this.props
+    const {
+      timelines, centerTime, screenRange,
+      replaceCenterTime
+    } = this.props
 
     const mouseDown = (e) => {
       this.state.dragging = true
@@ -35,21 +40,24 @@ class App extends React.Component {
 
         console.log(millisecondsMoved)
 
-        replaceCenterTime(this.state.lastCenterTime + millisecondsMoved)
+        replaceCenterTime(this.state.lastCenterTime - millisecondsMoved)
       }
     }
 
     return (
-      <div id='content' className="timelines-app" onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
-        centerTime: {moment(centerTime).tz('UTC').toISOString()}
+      <div id='content' className='timelines-app' onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}>
+        centerTime: {moment(centerTime).tz('UTC').toISOString()} ({centerTime})
         <br />
         screenRange: {screenRange}
+
+        {timelines.map(timeline => (<Timeline timeline={timeline} />))}
       </div>
     )
   }
 }
 
 export default connect((state) => ({
+  timelines: getTimelines(state),
   centerTime: getCenterTime(state),
   screenRange: getScreenRange(state)
 }), Actions)(App)

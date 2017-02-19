@@ -1,0 +1,71 @@
+@timeline-hue: 121;
+@timeline-light-color: hsl(@timeline-hue, 30%, 65%);
+@timeline-dark-color: hsl(@timeline-hue, 100%, 25%);
+@timeline-time-mark-color: @timeline-light-color;
+@timeline-line-color: @timeline-dark-color;
+@timeline-label-color: @timeline-dark-color;
+
+@marker-hue: 242;
+@marker-label-color: hsl(@marker-hue, 30%, 65%);
+@marker-line-color: hsl(@marker-hue, 100%, 25%);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.timeline {
+  width: 100%;
+  position: relative;
+  margin-top: 5rem;
+}
+
+.timeline-timezone-label {
+  color: @timeline-label-color;
+}
+
+.timeline-time-mark {
+  font-size: 0.6rem;
+  position: absolute;
+  bottom: 0;
+  padding: 0.2rem;
+  padding-bottom: 1.2rem;
+  border-left: 3px solid;
+  border-left-color: @timeline-time-mark-color;
+  color: @timeline-time-mark-color;
+  transform: translate(-1.5px, 0);
+  z-index: -1;
+}
+
+.timeline-time-mark.mod-marker {
+  border-color: rgba(0, 0, 0, 0);
+  color: @marker-label-color
+}
+
+.timeline::after {
+  display: block;
+  content: '';
+  width: 100%;
+  height: 5px;
+  background-color: @timeline-line-color;
+  z-index: 1;
+}
+
+.marker {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  border-left: 2px solid @marker-line-color;
+  transform: translate(-1px, 0)
+}
+
+.marker-label {
+  position: relative;
+  padding-left: 4px;
+  color: @marker-label-color;
+}

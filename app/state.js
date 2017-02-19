@@ -9,7 +9,7 @@ export const initialState = fromJS({
         timezone: 'UTC'
       },
       {
-        timezone: 'Local'
+        timezone: moment.tz.guess()
       }
     ],
     markers: [
@@ -18,7 +18,7 @@ export const initialState = fromJS({
   },
   view: {
     centerTime: moment().tz('UTC').valueOf(), // current time in ms
-    screenRange: 86400000 // one day in ms
+    screenRange: 1000 * 60 * 60 * 24 // one day in ms
   }
 })
 
@@ -29,6 +29,10 @@ export function getScreenRange (state) {
 
 export function getCenterTime (state) {
   return state.getIn(['view', 'centerTime'])
+}
+
+export function getTimelines (state) {
+  return state.getIn(['model', 'timelines']).toJS()
 }
 
 export function reducer (state = initialState, {type, payload}) {
